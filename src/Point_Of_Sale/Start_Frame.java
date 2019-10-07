@@ -21,12 +21,12 @@ public class Start_Frame extends javax.swing.JFrame {
      */
     public Start_Frame() {
         
-        //Toolkit toolkit = Toolkit.getDefaultToolkit();
+        Toolkit toolkit = Toolkit.getDefaultToolkit();
         
-        //double width = toolkit.getScreenSize().getWidth();
-        //double height = toolkit.getScreenSize().getHeight();
+        double width = toolkit.getScreenSize().getWidth();
+        double height = toolkit.getScreenSize().getHeight();
         
-        //this.setSize((int)width, (int)height);     
+        this.setSize((int)width, (int)height);     
                 
         initComponents();     
         
