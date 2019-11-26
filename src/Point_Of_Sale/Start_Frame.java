@@ -9,6 +9,9 @@ import java.awt.CardLayout;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 
 /**
  *
@@ -19,8 +22,31 @@ public class Start_Frame extends javax.swing.JFrame {
     /**
      * Creates new form Start_Frame
      */
-    String command = "python /c start python home/pi/Desktop/spitest1.py";
+    //String command = "python /c start python home/pi/Desktop/spitest1.py";
     Process p;
+    BufferedReader reader;
+    
+    public String read_whisper(){
+        try{
+            reader = new BufferedReader(new FileReader("stm_whisper.txt"));
+            return reader.readLine(); 
+        }catch(IOException ex){
+            System.out.println("reading exception");
+            ex.printStackTrace();
+            return "Error 404";
+        }
+    }
+    
+    public void send_data(String data){
+        try{
+            p = Runtime.getRuntime().exec("python spitest1.py " + data );
+        }catch (IOException e){
+            System.out.println("python exception");
+            e.printStackTrace();
+        }
+    }
+    
+    
     public Start_Frame() {
         //this.setUndecorated(true);
         initComponents(); 
@@ -871,7 +897,12 @@ public class Start_Frame extends javax.swing.JFrame {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        p = Runtime.getRuntime().exec(command + param );
+        //sending spi 
+        System.out.println("login");
+
+
+        //SmartKgrp18
+        
         jPanel1.setVisible(false);
         jPanel2.setVisible(true);
         //send SPI - 0x01
