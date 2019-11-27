@@ -25,10 +25,12 @@ public class Start_Frame extends javax.swing.JFrame {
     //String command = "python /c start python home/pi/Desktop/spitest1.py";
     Process p;
     BufferedReader reader;
+    //public String curr_panel = "IDLE";
     
     public String read_whisper(){
         try{
             reader = new BufferedReader(new FileReader("stm_whisper.txt"));
+            System.out.println(reader.readLine());
             return reader.readLine(); 
         }catch(IOException ex){
             System.out.println("reading exception");
@@ -40,18 +42,48 @@ public class Start_Frame extends javax.swing.JFrame {
     public void send_data(String data){
         try{
             p = Runtime.getRuntime().exec("python spitest1.py " + data );
+             System.out.println(data);
         }catch (IOException e){
             System.out.println("python exception");
             e.printStackTrace();
         }
     }
     
-    
+    public void cursor(){
+        try{
+            p = Runtime.getRuntime().exec("python curser.py ");
+        }catch (IOException e){
+            System.out.println("python exception");
+            e.printStackTrace();
+        }
+    }
     public Start_Frame() {
         //this.setUndecorated(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
         initComponents(); 
         jLabel7.setVisible(false);
-
+        
+//                switch(curr_panel){
+//           case "IDLE": send_data("t idle"); System.out.println("IDLE");
+//                break;
+//           case "LOGIN": send_data("t login");  System.out.println("LOGIN");
+//                break;
+//           case "SIGN_UP":send_data("t sign_up");  System.out.println("SIGN_UP");
+//                break;
+//           case "MAIN":send_data("t main"); 
+//                break;                
+//           case "EDIT":send_data("t edit"); 
+//                break;
+//           case "CHECK_OUT":send_data("t checkout"); 
+//                break;
+//           case "ENTER_CARD":send_data("t enter"); 
+//                break;
+//           case "SWIPE_CARD":send_data("t swipw"); 
+//                break;
+//           case "END":send_data("t end"); 
+//                break;                
+//        }
+        
         //setExtendedState(JFrame.MAXIMIZED_BOTH);  
         //this.pack();
                 
@@ -186,8 +218,13 @@ public class Start_Frame extends javax.swing.JFrame {
         jSeparator4 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setPreferredSize(new java.awt.Dimension(800, 600));
+        setSize(new java.awt.Dimension(800, 480));
         getContentPane().setLayout(new java.awt.CardLayout());
 
+        jPanel1.setBounds(new java.awt.Rectangle(0, 0, 800, 480));
+        jPanel1.setMaximumSize(new java.awt.Dimension(1000, 1000));
+        jPanel1.setMinimumSize(new java.awt.Dimension(800, 480));
         jPanel1.setPreferredSize(new java.awt.Dimension(800, 480));
 
         jButton1.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
@@ -198,7 +235,7 @@ public class Start_Frame extends javax.swing.JFrame {
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Georgia", 0, 48)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Georgia", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel1.setText("Welcome to SmartKart ");
 
@@ -213,8 +250,8 @@ public class Start_Frame extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
         jLabel3.setText("OR");
 
-        jLabel6.setFont(new java.awt.Font("Apple Chancery", 0, 18)); // NOI18N
-        jLabel6.setText("Your Intelligent shopping Assistant");
+        jLabel6.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        jLabel6.setText("Your Intelligent Shopping Assistant");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -230,13 +267,12 @@ public class Start_Frame extends javax.swing.JFrame {
                         .addGap(63, 63, 63)
                         .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(258, 258, 258)
-                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 279, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(105, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(129, 129, 129))
+                        .addGap(126, 126, 126)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 520, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(222, 222, 222)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 324, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(98, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -250,13 +286,21 @@ public class Start_Frame extends javax.swing.JFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(23, 23, 23))
+                .addContainerGap(69, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, "card2");
 
+        jPanel2.setPreferredSize(new java.awt.Dimension(800, 480));
+
         jLabel2.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
         jLabel2.setText("Username");
+
+        jTextField1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField1MouseClicked(evt);
+            }
+        });
 
         jButton2.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
         jButton2.setText("Login");
@@ -290,7 +334,7 @@ public class Start_Frame extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(209, Short.MAX_VALUE)
+                .addContainerGap(202, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -335,7 +379,7 @@ public class Start_Frame extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel2, "card3");
@@ -504,7 +548,7 @@ public class Start_Frame extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(172, Short.MAX_VALUE))
+                .addContainerGap(163, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel4, "card5");
@@ -543,7 +587,7 @@ public class Start_Frame extends javax.swing.JFrame {
         jPanel5Layout.setHorizontalGroup(
             jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(161, Short.MAX_VALUE)
+                .addContainerGap(154, Short.MAX_VALUE)
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
                         .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -588,7 +632,7 @@ public class Start_Frame extends javax.swing.JFrame {
                     .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel5, "card6");
@@ -639,7 +683,7 @@ public class Start_Frame extends javax.swing.JFrame {
                     .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(593, 593, 593)
                         .addComponent(jButton9)))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(89, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -656,7 +700,7 @@ public class Start_Frame extends javax.swing.JFrame {
                 .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(103, 103, 103)
                 .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(88, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel7, "card6");
@@ -675,7 +719,7 @@ public class Start_Frame extends javax.swing.JFrame {
         jPanel6Layout.setHorizontalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
-                .addContainerGap(150, Short.MAX_VALUE)
+                .addContainerGap(143, Short.MAX_VALUE)
                 .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel30)
@@ -691,7 +735,7 @@ public class Start_Frame extends javax.swing.JFrame {
                 .addComponent(jLabel29)
                 .addGap(36, 36, 36)
                 .addComponent(jLabel30)
-                .addContainerGap(208, Short.MAX_VALUE))
+                .addContainerGap(199, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel6, "card6");
@@ -756,7 +800,7 @@ public class Start_Frame extends javax.swing.JFrame {
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(57, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -770,7 +814,7 @@ public class Start_Frame extends javax.swing.JFrame {
                         .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(40, 40, 40)
                         .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(52, Short.MAX_VALUE))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel9, "card6");
@@ -898,38 +942,55 @@ public class Start_Frame extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         //sending spi 
-        System.out.println("login");
-
-
         //SmartKgrp18
-        
+        send_data("h 0x04");
+        if(read_whisper() == "a"){
         jPanel1.setVisible(false);
-        jPanel2.setVisible(true);
+        jPanel2.setVisible(true); 
+        }
+        //cursor();
+        //curr_panel = "LOGIN";
+
         //send SPI - 0x01
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
+        send_data("h 0x03");
+        if (read_whisper() == "0x03"){
         String user = jTextField1.getText();
         String pwd = jPasswordField1.getText();
+//        if(user == "" || pwd == ""){
+//            jLabel7.setText("Please leave no text field empty");
+//            jLabel7.setVisible(true);
+//        }
+
+            
+        send_data("s " + user + "," + pwd);
+        
+            //System.out.println(user + "," + pwd);
+ 
+        }
         
         //lookup user id 
-        if(pwd.equals("GoldRush1") &&  user.equals("PurduePete") ){
-            //JOptionPane.showMessageDialog(null, "Hello "+ user );
-            //System.exit(0);
-                jPanel2.setVisible(false);
-                jPanel9.setVisible(true);
-        }
-        else{
-            //JOptionPane.showMessageDialog(null, "Incorrect Passward");
-            jLabel7.setVisible(true);
-            
-        }
+//        if(pwd.equals("GoldRush1") &&  user.equals("PurduePete") ){
+//            //JOptionPane.showMessageDialog(null, "Hello "+ user );
+//            System.exit(0);
+//                jPanel2.setVisible(false);
+//                jPanel9.setVisible(true);
+//        }
+//        else{
+//            //JOptionPane.showMessageDialog(null, "Incorrect Passward");
+//            jLabel7.setVisible(true);
+//            
+//        }
         //  send SPI - 0x03 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+        send_data("h 0x02");
+        //curr_panel = "SIGN_UP";
         jPanel1.setVisible(false);
         jPanel3.setVisible(true);
            //send SPI - 0x02
@@ -937,6 +998,7 @@ public class Start_Frame extends javax.swing.JFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
+        //curr_panel = "SIGN_UP";
         jPanel2.setVisible(false);
         jPanel3.setVisible(true);
            //send SPI - 0x02
@@ -1038,6 +1100,11 @@ public class Start_Frame extends javax.swing.JFrame {
         jPanel10.setVisible(true);
     }//GEN-LAST:event_jButton13ActionPerformed
 
+    private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
+        // TODO add your handling code here:
+        //send_data("h 0xBE");
+    }//GEN-LAST:event_jTextField1MouseClicked
+
     /**
      * @param args the command line arguments
      */
@@ -1065,6 +1132,8 @@ public class Start_Frame extends javax.swing.JFrame {
         }
         //</editor-fold>
 
+
+       
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
