@@ -1,0 +1,64 @@
+def get_state():
+    with open("state.txt","r") as fp:
+        return fp.readline()
+
+def enable_swipe():
+    val = True
+    with open("credit_card.txt","r") as fp2:
+        if fp2.readline() != "":
+            val = False
+    if val:
+        inp = None
+
+        while not inp:
+            inp = input("Swipe card")
+
+        print(inp)
+
+        if inp[0:2] != "%B":
+            with open("credit_card.txt", "w") as fp:
+                fp.write("FALSE")
+        else:
+            # Credit or debit card
+            print("its a credit ")
+            imp = inp.split('^')
+
+            cr_no = imp[0][2:]
+            cr_name = " ".join(imp[1].strip().split('/')[::-1])
+            cr_exp = imp[2][2:4] + "/" + imp[2][:2]
+
+            with open("credit_card.txt", "w") as fp:
+                fp.write(cr_no + "\n" + cr_name + "\n" + cr_exp)
+
+
+if __name__ == '__main__':
+    #enable_swipe()
+    with open("credit_card.txt", "w") as fp:
+        fp.write("")
+
+
+    while True:
+        curr_state = get_state()
+        if curr_state == "IDLE":
+            pass
+        elif curr_state == "LOGIN":
+            pass
+        elif curr_state == "SIGN_UP":
+            pass
+        elif curr_state == "MAIN":
+            pass
+        elif curr_state == "CHECK_OUT":
+            pass
+        elif curr_state == "SWIPE_CARD":
+            enable_swipe()
+        elif curr_state == "ENTER_CARD":
+            pass
+        elif curr_state == "EDIT":
+            pass
+        elif curr_state == "END":
+            pass
+
+
+
+
+

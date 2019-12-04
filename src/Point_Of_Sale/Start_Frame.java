@@ -9,29 +9,149 @@ import java.awt.CardLayout;
 import java.awt.Toolkit;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import java.io.IOException;
-import java.io.BufferedReader;
-import java.io.FileReader;
+import java.io.*;
+import javax.swing.JFrame;
+import java.util.Date;
+import java.net.URL;
 
 /**
  *
  * @author rahulkartick
  */
+//
+//public class myRunnable implements Runnable{
+//    private int var;
+//    
+//    public myRunnable(int var){
+//        this.var = var;
+//    }
+//    
+//
+//    
+//}
+
+
 public class Start_Frame extends javax.swing.JFrame {
 
     /**
      * Creates new form Start_Frame
      */
     //String command = "python /c start python home/pi/Desktop/spitest1.py";
-    Process p;
-    BufferedReader reader;
-    //public String curr_panel = "IDLE";
+    
+    //BufferedReader reader;
+
+    public void update_state (String new_state){
+        try{
+            BufferedWriter writer_state = new BufferedWriter(new FileWriter("state.txt"));
+            writer_state.write(new_state);
+            writer_state.close();
+        }catch(IOException ex){
+            System.out.println("ead file exception");
+            ex.printStackTrace();
+        }
+    }
+    
+    
+//    public void update_state2 (String new_state){
+//        try{
+//            BufferedWriter writer_state = new BufferedWriter(new FileWriter("stm_whisper.txt"));
+//            writer_state.write(new_state);
+//            writer_state.close();
+//        }catch(IOException ex){
+//            System.out.println("ead file exception");
+//            ex.printStackTrace();
+//        }
+//    }
+    
+    public void auth_user(String user, String pwd){
+        try{
+            BufferedWriter writer_auth = new BufferedWriter(new FileWriter("auth.txt"));
+            writer_auth.write(user + "," + pwd);
+            writer_auth.close();
+        }catch(IOException ex){
+            System.out.println("ead file exception");
+            ex.printStackTrace();
+        }
+    }
+    
+    
+    public void new_user(String fullname, String email, String pwd, String diet, String budget){
+        try{
+            BufferedWriter writer_user = new BufferedWriter(new FileWriter("new_user.txt"));
+            writer_user.write( email+ "," + pwd+ "\n" + fullname + "," + diet+ "," + budget);
+            writer_user.close();
+        }catch(IOException ex){
+            System.out.println("ead file exception");
+            ex.printStackTrace();
+        }
+    }
+    
+    Date startDate;
+    Date endDate;
+    //loop through
+    String state = "IDLE";
+    
+    
+    public void auth_it(String val, String codet){
+        if(val.equals("TRUE")){
+            if(codet.equals("auth")){
+               jPanel2.setVisible(false);
+                jPanel9.setVisible(true);  
+            }else if(codet.equals("new")){
+                jPanel9.setVisible(true);
+                jPanel11.setVisible(false);
+            }
+
+            state = "MAIN";
+            update_state("MAIN");
+             try{
+                 BufferedWriter writer3 = new BufferedWriter(new FileWriter("stm_whisper.txt"));
+                 writer3.close();   
+             }catch(IOException e){
+                 System.out.println("ead file exception");
+                 e.printStackTrace();
+             }
+        }
+        else if(val.equals("FALSE")){
+            jLabel7.setVisible(true);
+            try{
+                 BufferedWriter writer1 = new BufferedWriter(new FileWriter("stm_whisper.txt"));
+                 writer1.close();   
+             }catch(IOException e){
+                 System.out.println("ead file exception");
+                 e.printStackTrace();
+             }
+        }
+
+    }
+    
+    public String get_state(){
+        return state;
+    }
+    
+    public void new_game(){
+        jPanel6.setVisible(false);
+        jPanel1.setVisible(true);
+    }
+    
+    public void update_time(long ti){
+        jLabel46.setText("Time Remaining: "+ ti +" s");
+    }
+    
+    public void swipe_card(String cr_no,String cr_name,String cr_date){
+        jTextField20.setText(cr_name);
+        jTextField9.setText(cr_no);
+        jTextField21.setText(cr_date);
+        jButton9.setVisible(true);
+    }          
     
     public String read_whisper(){
         try{
-            reader = new BufferedReader(new FileReader("stm_whisper.txt"));
-            System.out.println(reader.readLine());
-            return reader.readLine(); 
+            BufferedReader reader = new BufferedReader(new FileReader("stm_whisper.txt"));
+            //System.out.println(reader.readLine());
+            String man_val = reader.readLine();
+            reader.close();
+            return  man_val;
         }catch(IOException ex){
             System.out.println("reading exception");
             ex.printStackTrace();
@@ -39,8 +159,9 @@ public class Start_Frame extends javax.swing.JFrame {
         }
     }
     
-    public void send_data(String data){
+    public static void send_data(String data){
         try{
+            Process p;
             p = Runtime.getRuntime().exec("python spitest1.py " + data );
              System.out.println(data);
         }catch (IOException e){
@@ -49,55 +170,70 @@ public class Start_Frame extends javax.swing.JFrame {
         }
     }
     
+    //runs script to read card value
+    public void read_card(){
+        try{
+            Process p;
+            p = Runtime.getRuntime().exec("python otg.py");
+        }catch (IOException e){
+            System.out.println("python card exception");
+            e.printStackTrace();
+        }
+    }
+        
     public void cursor(){
         try{
+            Process p;
             p = Runtime.getRuntime().exec("python curser.py ");
         }catch (IOException e){
             System.out.println("python exception");
             e.printStackTrace();
         }
     }
-    public Start_Frame() {
+    
+    
+    public Start_Frame(){
+        //initializations 
+//        try{
+//                    BufferedWriter writer0 = new BufferedWriter(new FileWriter("stm_whisper.txt"));
+//                writer0.close(); 
+//        }catch (IOException m){
+//            System.out.println("ead file exception");
+//            m.printStackTrace();
+//        }
+
+        //jPanel1.setVisible(true);
+//        jPanel2.setVisible(false);
+//        jPanel3.setVisible(false);
+//        jPanel4.setVisible(false);
+//        jPanel5.setVisible(false);
+//        jPanel6.setVisible(false);
+//        jPanel7.setVisible(false);
+//        jPanel9.setVisible(false);
+//        jPanel10.setVisible(false);
+        
         //this.setUndecorated(true);
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         initComponents(); 
         jLabel7.setVisible(false);
         
-//                switch(curr_panel){
-//           case "IDLE": send_data("t idle"); System.out.println("IDLE");
-//                break;
-//           case "LOGIN": send_data("t login");  System.out.println("LOGIN");
-//                break;
-//           case "SIGN_UP":send_data("t sign_up");  System.out.println("SIGN_UP");
-//                break;
-//           case "MAIN":send_data("t main"); 
-//                break;                
-//           case "EDIT":send_data("t edit"); 
-//                break;
-//           case "CHECK_OUT":send_data("t checkout"); 
-//                break;
-//           case "ENTER_CARD":send_data("t enter"); 
-//                break;
-//           case "SWIPE_CARD":send_data("t swipw"); 
-//                break;
-//           case "END":send_data("t end"); 
-//                break;                
-//        }
+        //swipe card frame
+        jTextField9.setEditable(false);
+        jTextField20.setEditable(false);
+        jTextField21.setEditable(false);
+        jButton9.setVisible(false);
         
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);  
-        //this.pack();
-                
+        //update state 
+        update_state("IDLE");
+           
 //        Toolkit toolkit = Toolkit.getDefaultToolkit();
 //        
 //        double width = toolkit.getScreenSize().getWidth();
-//        double height = toolkit.getScreenSize().getHeight();
-//        
+//        double height = toolkit.getScreenSize().getHeight();      
 //        this.setSize((int)width, (int)height);   
-//        this.setLocationByPlatform(true);
-                
-        
+//        this.setLocationByPlatform(true);      
     }
-
+ 
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -173,10 +309,13 @@ public class Start_Frame extends javax.swing.JFrame {
         jLabel28 = new javax.swing.JLabel();
         jButton9 = new javax.swing.JButton();
         jTextField9 = new javax.swing.JTextField();
-        jFormattedTextField2 = new javax.swing.JFormattedTextField();
+        jTextField20 = new javax.swing.JTextField();
+        jLabel45 = new javax.swing.JLabel();
+        jTextField21 = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel29 = new javax.swing.JLabel();
         jLabel30 = new javax.swing.JLabel();
+        jLabel46 = new javax.swing.JLabel();
         jPanel9 = new javax.swing.JPanel();
         jButton10 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
@@ -216,6 +355,30 @@ public class Start_Frame extends javax.swing.JFrame {
         filler8 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 340), new java.awt.Dimension(0, 340), new java.awt.Dimension(32767, 340));
         jSeparator3 = new javax.swing.JSeparator();
         jSeparator4 = new javax.swing.JSeparator();
+        jPanel11 = new javax.swing.JPanel();
+        jLabel47 = new javax.swing.JLabel();
+        jLabel48 = new javax.swing.JLabel();
+        jLabel49 = new javax.swing.JLabel();
+        jLabel50 = new javax.swing.JLabel();
+        jButton11 = new javax.swing.JButton();
+        jLabel51 = new javax.swing.JLabel();
+        jTextField22 = new javax.swing.JTextField();
+        jLabel52 = new javax.swing.JLabel();
+        jTextField23 = new javax.swing.JTextField();
+        jLabel53 = new javax.swing.JLabel();
+        jTextField24 = new javax.swing.JTextField();
+        jPasswordField4 = new javax.swing.JPasswordField();
+        jLabel54 = new javax.swing.JLabel();
+        jLabel58 = new javax.swing.JLabel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        jTextArea3 = new javax.swing.JTextArea();
+        filler9 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 360), new java.awt.Dimension(0, 360), new java.awt.Dimension(32767, 360));
+        filler10 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 340), new java.awt.Dimension(0, 340), new java.awt.Dimension(32767, 340));
+        filler11 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 340), new java.awt.Dimension(0, 340), new java.awt.Dimension(32767, 340));
+        filler12 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 340), new java.awt.Dimension(0, 340), new java.awt.Dimension(32767, 340));
+        jSeparator5 = new javax.swing.JSeparator();
+        jSeparator6 = new javax.swing.JSeparator();
+        jLabel55 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setPreferredSize(new java.awt.Dimension(800, 600));
@@ -286,7 +449,7 @@ public class Start_Frame extends javax.swing.JFrame {
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(69, Short.MAX_VALUE))
+                .addContainerGap(66, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel1, "card2");
@@ -548,7 +711,7 @@ public class Start_Frame extends javax.swing.JFrame {
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(163, Short.MAX_VALUE))
+                .addContainerGap(160, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel4, "card5");
@@ -632,7 +795,7 @@ public class Start_Frame extends javax.swing.JFrame {
                     .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(76, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel5, "card6");
@@ -657,7 +820,8 @@ public class Start_Frame extends javax.swing.JFrame {
             }
         });
 
-        jFormattedTextField2.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("mm/dd/yyyy"))));
+        jLabel45.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        jLabel45.setText("Name on Card ");
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
         jPanel7.setLayout(jPanel7Layout);
@@ -666,23 +830,20 @@ public class Start_Frame extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jLabel26))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jLabel27))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jLabel28))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
-                        .addGap(154, 154, 154)
-                        .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel7Layout.createSequentialGroup()
                         .addGap(593, 593, 593)
-                        .addComponent(jButton9)))
+                        .addComponent(jButton9))
+                    .addGroup(jPanel7Layout.createSequentialGroup()
+                        .addGap(154, 154, 154)
+                        .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel27)
+                            .addGroup(jPanel7Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel45))
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel28)
+                            .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(89, Short.MAX_VALUE))
         );
         jPanel7Layout.setVerticalGroup(
@@ -690,15 +851,19 @@ public class Start_Frame extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addGap(40, 40, 40)
                 .addComponent(jLabel26)
-                .addGap(33, 33, 33)
+                .addGap(40, 40, 40)
+                .addComponent(jLabel45)
+                .addGap(12, 12, 12)
+                .addComponent(jTextField20, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
                 .addComponent(jLabel27)
-                .addGap(6, 6, 6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTextField9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel28)
-                .addGap(6, 6, 6)
-                .addComponent(jFormattedTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(103, 103, 103)
+                .addGap(18, 18, 18)
+                .addComponent(jTextField21, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
                 .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(79, Short.MAX_VALUE))
         );
@@ -714,6 +879,8 @@ public class Start_Frame extends javax.swing.JFrame {
         jLabel30.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
         jLabel30.setText("Thank you for shopping with SmartKart! ");
 
+        jLabel46.setText("Time Remaining: 10 s");
+
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
         jPanel6Layout.setHorizontalGroup(
@@ -727,6 +894,10 @@ public class Start_Frame extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel6Layout.createSequentialGroup()
                         .addComponent(jLabel29)
                         .addGap(144, 144, 144))))
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addGap(318, 318, 318)
+                .addComponent(jLabel46)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPanel6Layout.setVerticalGroup(
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -735,7 +906,9 @@ public class Start_Frame extends javax.swing.JFrame {
                 .addComponent(jLabel29)
                 .addGap(36, 36, 36)
                 .addComponent(jLabel30)
-                .addContainerGap(199, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jLabel46)
+                .addContainerGap(165, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel6, "card6");
@@ -936,48 +1109,205 @@ public class Start_Frame extends javax.swing.JFrame {
 
         getContentPane().add(jPanel10, "card4");
 
+        jPanel11.setBounds(new java.awt.Rectangle(0, 0, 800, 480));
+        jPanel11.setMaximumSize(new java.awt.Dimension(800, 480));
+        jPanel11.setMinimumSize(new java.awt.Dimension(800, 480));
+        jPanel11.setPreferredSize(new java.awt.Dimension(800, 480));
+
+        jLabel47.setFont(new java.awt.Font("Georgia", 0, 48)); // NOI18N
+        jLabel47.setText("Sign Up");
+
+        jLabel48.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
+        jLabel48.setText("Personal Information");
+
+        jLabel49.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
+        jLabel49.setText("Dietary Restrictions");
+
+        jLabel50.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
+        jLabel50.setText("Budget");
+
+        jButton11.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        jButton11.setText("Submit");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
+        jLabel51.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
+        jLabel51.setText("Enter Budget");
+
+        jTextField22.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTextField22ActionPerformed(evt);
+            }
+        });
+
+        jLabel52.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
+        jLabel52.setText("Full Name");
+
+        jLabel53.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
+        jLabel53.setText("Email");
+
+        jLabel54.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
+        jLabel54.setText("Password ");
+
+        jLabel58.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
+        jLabel58.setText("Enter Dietary Restrictions");
+
+        jTextArea3.setColumns(20);
+        jTextArea3.setRows(5);
+        jTextArea3.setToolTipText("Enter dietary restrictions seperated by commas");
+        jScrollPane4.setViewportView(jTextArea3);
+
+        jSeparator5.setBackground(new java.awt.Color(0, 0, 0));
+        jSeparator5.setForeground(new java.awt.Color(0, 0, 0));
+        jSeparator5.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jSeparator6.setBackground(new java.awt.Color(0, 0, 0));
+        jSeparator6.setForeground(new java.awt.Color(0, 0, 0));
+        jSeparator6.setOrientation(javax.swing.SwingConstants.VERTICAL);
+
+        jLabel55.setText("$");
+
+        javax.swing.GroupLayout jPanel11Layout = new javax.swing.GroupLayout(jPanel11);
+        jPanel11.setLayout(jPanel11Layout);
+        jPanel11Layout.setHorizontalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(filler10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filler11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filler9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(filler12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(40, 40, 40)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel48)
+                    .addComponent(jLabel52)
+                    .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel53)
+                    .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel54)
+                    .addComponent(jPasswordField4, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(51, 51, 51)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(48, 48, 48)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel47)
+                    .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 235, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel49)
+                            .addComponent(jLabel58))))
+                .addGap(25, 25, 25)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel50)
+                    .addComponent(jLabel51)
+                    .addGroup(jPanel11Layout.createSequentialGroup()
+                        .addComponent(jLabel55, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, 140, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
+        jPanel11Layout.setVerticalGroup(
+            jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(filler10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(filler11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(filler9, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(filler12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addComponent(jLabel48)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel52)
+                .addGap(3, 3, 3)
+                .addComponent(jTextField23, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jLabel53)
+                .addGap(3, 3, 3)
+                .addComponent(jTextField24, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel54)
+                .addGap(3, 3, 3)
+                .addComponent(jPasswordField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel47)
+                .addGap(25, 25, 25)
+                .addComponent(jLabel49)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel58)
+                .addGap(3, 3, 3)
+                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 260, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addComponent(jSeparator6, javax.swing.GroupLayout.PREFERRED_SIZE, 314, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel11Layout.createSequentialGroup()
+                .addGap(90, 90, 90)
+                .addComponent(jLabel50)
+                .addGap(13, 13, 13)
+                .addComponent(jLabel51)
+                .addGap(3, 3, 3)
+                .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel55))
+                .addGap(174, 174, 174)
+                .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+
+        getContentPane().add(jPanel11, "card4");
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
-        //sending spi 
-        //SmartKgrp18
         send_data("h 0x04");
-        if(read_whisper() == "a"){
         jPanel1.setVisible(false);
-        jPanel2.setVisible(true); 
-        }
-        //cursor();
-        //curr_panel = "LOGIN";
+        jPanel2.setVisible(true);
+        state = "LOGIN";
+        update_state("LOGIN");
 
-        //send SPI - 0x01
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        send_data("h 0x03");
-        if (read_whisper() == "0x03"){
+
+//        if (read_whisper() == "0x03"){
+
         String user = jTextField1.getText();
         String pwd = jPasswordField1.getText();
-//        if(user == "" || pwd == ""){
-//            jLabel7.setText("Please leave no text field empty");
-//            jLabel7.setVisible(true);
+        auth_user(user,pwd);
+//        if(user == "AS"){
+//            update_state2("TRUE");
 //        }
-
-            
-        send_data("s " + user + "," + pwd);
-        
-            //System.out.println(user + "," + pwd);
- 
-        }
+//        else{
+//            update_state2("FALSE");
+//        }
+//
+//      
+//        send_data("h 0x03");
+//        send_data("l " + user + "," + pwd);
+//        send_data("s " + user + "," + pwd);
+//        
+//            //System.out.println(user + "," + pwd);
+// 
+//        }
         
         //lookup user id 
 //        if(pwd.equals("GoldRush1") &&  user.equals("PurduePete") ){
 //            //JOptionPane.showMessageDialog(null, "Hello "+ user );
 //            System.exit(0);
-//                jPanel2.setVisible(false);
-//                jPanel9.setVisible(true);
+//            jPanel2.setVisible(false);
+//            jPanel9.setVisible(true);
+            state = "AUTH";
+            update_state("AUTH");
 //        }
 //        else{
 //            //JOptionPane.showMessageDialog(null, "Incorrect Passward");
@@ -989,19 +1319,21 @@ public class Start_Frame extends javax.swing.JFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        send_data("h 0x02");
-        //curr_panel = "SIGN_UP";
+        //send_data("h 0x02");
+        state = "SIGN_UP";
         jPanel1.setVisible(false);
-        jPanel3.setVisible(true);
-           //send SPI - 0x02
+        jPanel11.setVisible(true);
+        send_data("h 0x02");
+        update_state("SIGN_UP");
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        //curr_panel = "SIGN_UP";
+        state = "SIGN_UP";
         jPanel2.setVisible(false);
-        jPanel3.setVisible(true);
-           //send SPI - 0x02
+        jPanel11.setVisible(true);
+        update_state("SIGN_UP");
+        send_data("h 0x02");
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
@@ -1023,58 +1355,73 @@ public class Start_Frame extends javax.swing.JFrame {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
         //enter values in the sd card 
-        String budget = jTextField2.getText();
-        String full_name = jTextField3.getText();
-        String email = jTextField4.getText();
-        String street_ad = jTextField6.getText();
-        String state = jTextField7.getText();
-        String zip_code = jTextField8.getText();
-        String dietary_restrictions = jTextArea1.getText();
-        String pwd2 = jPasswordField2.getText();
-        
+//        String budget = jTextField2.getText();
+//        String full_name = jTextField3.getText();
+//        String email = jTextField4.getText();
+//        String street_ad = jTextField6.getText();
+//        String state = jTextField7.getText();
+//        String zip_code = jTextField8.getText();
+//        String dietary_restrictions = jTextArea1.getText();
+//        String pwd2 = jPasswordField2.getText();
+        update_state("MAIN");
+        state = "MAIN";
         jPanel4.setVisible(false);
         jPanel9.setVisible(true);
+
            //send SPI - 0x09 - handshake 
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         // TODO add your handling code here:
+        state = "ENTER_CARD";
         jPanel4.setVisible(false);
         jPanel5.setVisible(true);
-        
+        update_state("ENTER_CARD");
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
+        state = "SWIPE_CARD";                
         jPanel4.setVisible(false);
         jPanel7.setVisible(true);
+        update_state("SWIPE_CARD");
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
         //perform card verification 
+        state = "END";
+        startDate = new Date();
         jPanel7.setVisible(false);
         jPanel6.setVisible(true);
+        update_state("END");
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
         //TODO-  perform card verification 
+        state = "END";
+        startDate = new Date();
         jPanel5.setVisible(false);
         jPanel6.setVisible(true);
+        update_state("END");
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
+        state = "SWIPE_CARD";
         jPanel9.setVisible(false);
-        jPanel4.setVisible(true);
+        jPanel7.setVisible(true);
+        update_state("SWIPE_CARD");
         //0x13
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         // TODO add your handling code here:
+        state = "MAIN";
         jPanel9.setVisible(true);
         jPanel10.setVisible(false);
+        update_state("MAIN");
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jTextField14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField14ActionPerformed
@@ -1096,14 +1443,36 @@ public class Start_Frame extends javax.swing.JFrame {
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
        //spi send - 0x12
+        state = "EDIT";
         jPanel9.setVisible(false);
         jPanel10.setVisible(true);
+        update_state("EDIT");
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
         // TODO add your handling code here:
         //send_data("h 0xBE");
     }//GEN-LAST:event_jTextField1MouseClicked
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+        // TODO add your handling code here:
+                //enter values in the sd card 
+        String budget = jTextField22.getText();
+        String full_name = jTextField23.getText();
+        String email = jTextField24.getText();
+        String diet = jTextArea3.getText();
+        String pwd12 = jPasswordField4.getText();
+        new_user(full_name,email,pwd12,diet,budget);
+        
+        state = "NEW_USER";
+        update_state("NEW_USER");
+        
+
+    }//GEN-LAST:event_jButton11ActionPerformed
+
+    private void jTextField22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField22ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField22ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -1131,19 +1500,197 @@ public class Start_Frame extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(Start_Frame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
-
-       
-        /* Create and display the form */
+        Start_Frame fr = new Start_Frame();
+        
         java.awt.EventQueue.invokeLater(new Runnable() {
+        
             public void run() {
-                new Start_Frame().setVisible(true);
+               
+                fr.setVisible(true);
+                
+            }      
+        });
+               
+    Thread t;
+        t = new Thread(new Runnable(){
+            String curr_state;
+            
+//            URL url = getClass().getResource("credit_card.txt");
+//            try{
+//                        File file = new File(url.toURI());
+//            }catch(URISyntaxException u){
+//            System.out.println("URO");
+//        }
+
+             File file = new File("credit_card.txt"); 
+             File file2 = new File("stm_whisper.txt"); 
+             
+             String value_auth;
+             String value_new;
+             int k2 = 1;
+             int k1 = 1;
+ 
+
+
+        
+             
+            public void run(){
+
+
+
+            while(true){
+                curr_state = fr.get_state();
+                switch(curr_state){
+                   case "IDLE": //send_data("t idle"); 
+                       k2 = 1;
+                       if(k1 == 1){ 
+                            try{
+                                 BufferedWriter writerI = new BufferedWriter(new FileWriter("stm_whisper.txt"));
+                                 writerI.close();
+                                 BufferedWriter writerA = new BufferedWriter(new FileWriter("auth.txt"));
+                                 writerA.close();
+                                 BufferedWriter writerU = new BufferedWriter(new FileWriter("new_user.txt"));
+                                 writerU.close();
+                             }catch(IOException e){
+                                 System.out.println("ead file exception");
+                                 e.printStackTrace();
+                             }
+                            k1 = k1-1;
+                       }
+                       
+                        System.out.println("IDLE");
+                        break;
+                   case "LOGIN": //send_data("t login"); 
+                        System.out.println("LOGIN");
+                                
+                        break;
+                   case "AUTH": //send_data("t login"); 
+                        value_auth = fr.read_whisper();
+                        if(value_auth != null){
+                            fr.auth_it(value_auth,"auth");
+                        }                             
+                        break;
+                   case "SIGN_UP"://send_data("t sign_up");  System.out.println("SIGN_UP");
+                        break;
+                   case "NEW_USER": //send_data("t login"); 
+                        value_new = fr.read_whisper();
+                        if(value_new != null){
+                            fr.auth_it(value_new,"new");
+                        }                             
+                        break;
+                   case "MAIN"://send_data("t main"); 
+                       if(k2 == 1){ 
+                            try{
+                                 BufferedWriter writerI = new BufferedWriter(new FileWriter("stm_whisper.txt"));
+                                 writerI.close();
+                                 BufferedWriter writerA = new BufferedWriter(new FileWriter("auth.txt"));
+                                 writerA.close();
+                                 BufferedWriter writerU = new BufferedWriter(new FileWriter("new_user.txt"));
+                                 writerU.close();
+                             }catch(IOException e){
+                                 System.out.println("ead file exception");
+                                 e.printStackTrace();
+                             }
+                            k2 = k2-1;
+                       }
+
+                        System.out.println("MAIN");
+                        break;
+                   case "EDIT"://send_data("t edit");
+                        break;
+                   case "CHECK_OUT"://send_data("t checkout");
+                        System.out.println("CHECKOUT");
+                        break;
+                   case "ENTER_CARD"://send_data("t enter"); 
+                        break;
+                   case "SWIPE_CARD"://send_data("t swipw"); 
+                       System.out.println("SWIPE");
+//                       try{
+//                             System.out.println("hello");
+//                         } catch (Exception e){
+//                             e.printStackTrace();
+//                         }
+                       
+//                       while(true){ 
+                            try{
+                                System.out.println("hello");
+                                BufferedReader reader = new BufferedReader(new FileReader(file));
+
+                                String line = reader.readLine();
+                                while(line  != null){  
+                                    String line2 = reader.readLine();
+                                    //System.out.println(line.substring(0,2));
+                                    if(line2 == null){
+                                    //will fail if name is FA 
+                                    System.out.println("EHAT2");
+                                    JOptionPane.showMessageDialog(null, "Please swipe either a credit or debit card");                                    
+                                    BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+                                    writer.close();                                   
+                                    }else{
+                                      String cr_no = line2;
+                                      String cr_name = line;
+                                      String cr_date = reader.readLine();
+                                      fr.swipe_card(cr_no,cr_name,cr_date);
+                                      BufferedWriter writer2 = new BufferedWriter(new FileWriter(file));
+                                      writer2.close();  
+                                    }
+                                 line = reader.readLine();
+                                }
+                                reader.close();
+                                
+                                
+//                                if (line == null){
+//                                    System.out.println("EHAT");
+//                                }else if(line == "FALSE"){
+//                                    System.out.println("EHAT2");
+//                                    JOptionPane.showMessageDialog(null, "Please swipe either a credit or debit card");
+//                                    writer.write("");
+//                                    
+//                                } else{
+//                                      String cr_no = reader.readLine();
+//                                      String cr_name = line;
+//                                      String cr_date = reader.readLine();
+//                                      fr.swipe_card(cr_no,cr_name,cr_date);
+//                                
+//                                    break;
+//                                }
+                            }catch(IOException ex){
+                                System.out.println("ead file exception");
+                                ex.printStackTrace();
+                            }
+//                       }   
+
+                       break;
+                   case "END"://send_data("t end");
+                        //System.out.println("END");
+                       k1 =1;
+                        fr.endDate = new Date();
+                        long Lapse = (fr.endDate.getTime() -fr.startDate.getTime())/1000;
+                        if(Lapse > 10){
+                            fr.new_game();
+                        }else{
+                            fr.update_time(10 - Lapse);
+                        }
+                        break;                
+                }
+                
+}
             }
         });
+        
+        t.start();
+
+        /* Create and display the form */
+
+        
     }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.Box.Filler filler1;
+    private javax.swing.Box.Filler filler10;
+    private javax.swing.Box.Filler filler11;
+    private javax.swing.Box.Filler filler12;
     private javax.swing.Box.Filler filler2;
     private javax.swing.Box.Filler filler3;
     private javax.swing.Box.Filler filler4;
@@ -1151,8 +1698,10 @@ public class Start_Frame extends javax.swing.JFrame {
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
     private javax.swing.Box.Filler filler8;
+    private javax.swing.Box.Filler filler9;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
     private javax.swing.JButton jButton2;
@@ -1164,7 +1713,6 @@ public class Start_Frame extends javax.swing.JFrame {
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JFormattedTextField jFormattedTextField1;
-    private javax.swing.JFormattedTextField jFormattedTextField2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -1204,13 +1752,26 @@ public class Start_Frame extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel42;
     private javax.swing.JLabel jLabel43;
     private javax.swing.JLabel jLabel44;
+    private javax.swing.JLabel jLabel45;
+    private javax.swing.JLabel jLabel46;
+    private javax.swing.JLabel jLabel47;
+    private javax.swing.JLabel jLabel48;
+    private javax.swing.JLabel jLabel49;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel50;
+    private javax.swing.JLabel jLabel51;
+    private javax.swing.JLabel jLabel52;
+    private javax.swing.JLabel jLabel53;
+    private javax.swing.JLabel jLabel54;
+    private javax.swing.JLabel jLabel55;
+    private javax.swing.JLabel jLabel58;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
+    private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
@@ -1222,16 +1783,21 @@ public class Start_Frame extends javax.swing.JFrame {
     private javax.swing.JPasswordField jPasswordField1;
     private javax.swing.JPasswordField jPasswordField2;
     private javax.swing.JPasswordField jPasswordField3;
+    private javax.swing.JPasswordField jPasswordField4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
+    private javax.swing.JSeparator jSeparator5;
+    private javax.swing.JSeparator jSeparator6;
     private javax.swing.JTable jTable1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextArea jTextArea2;
+    private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;
@@ -1244,6 +1810,11 @@ public class Start_Frame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField18;
     private javax.swing.JTextField jTextField19;
     private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTextField20;
+    private javax.swing.JTextField jTextField21;
+    private javax.swing.JTextField jTextField22;
+    private javax.swing.JTextField jTextField23;
+    private javax.swing.JTextField jTextField24;
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField4;
     private javax.swing.JTextField jTextField5;
