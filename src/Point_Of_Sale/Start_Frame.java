@@ -13,6 +13,7 @@ import java.io.*;
 import javax.swing.JFrame;
 import java.util.Date;
 import java.net.URL;
+import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -37,9 +38,41 @@ public class Start_Frame extends javax.swing.JFrame {
      * Creates new form Start_Frame
      */
     //String command = "python /c start python home/pi/Desktop/spitest1.py";
-    
-    //BufferedReader reader;
 
+    //BufferedReader reader;
+    
+    public void kings_castle(){
+        jTextField1.setText("");
+        jTextField2.setText("");
+        jPasswordField1.setText("");
+        jTextField20.setText("");
+        jTextField9.setText("");
+        jTextField21.setText("");
+        jTextField12.setText("");
+        jTextField13.setText("");
+        jTextField23.setText("");
+        jTextField24.setText("");
+        jPasswordField4.setText("");
+        jTextField22.setText("");
+        jTextArea3.setText("");
+
+        DefaultTableModel table = (DefaultTableModel)jTable2.getModel();
+        int len = jTable2.getRowCount();
+        for(int i =0; i< len; i++)
+        {
+            table.removeRow(0);
+         }
+    }
+    
+    public int budget_check(int count){
+        double budget = Double.parseDouble(jTextField12.getText());
+        double total = Double.parseDouble(jTextField13.getText());
+        if(total > budget){
+            JOptionPane.showMessageDialog(null,"You are exceeding your budget by $" + (int)(total - budget));
+        }
+        return count-1;
+    }
+    
     public void update_state (String new_state){
         try{
             BufferedWriter writer_state = new BufferedWriter(new FileWriter("state.txt"));
@@ -51,6 +84,44 @@ public class Start_Frame extends javax.swing.JFrame {
         }
     }
     
+    public void add_table_row(String product_name,String quantity, String cost){
+        DefaultTableModel table = (DefaultTableModel)jTable2.getModel();
+        table.addRow(new Object[]{product_name,quantity,cost});
+//        table.fireTableDataChanged();
+        double initial_value = 0.0;
+        String k = jTextField13.getText();
+        if("".equals(jTextField13.getText())){
+            initial_value = 0.0;
+        }else{
+            initial_value = Double.parseDouble(jTextField13.getText());
+        }
+        String new_cost = "" + ( ((double)((int)((initial_value + Double.parseDouble(cost))*100)))/100);
+        jTextField13.setText(new_cost);
+    }
+    
+        
+//    public void update_table_row(String product_name,String quantity, String cost){
+//        DefaultTableModel table = (DefaultTableModel)jTable2.getModel();
+//        table.addRow(new Object[]{product_name,quantity,cost});
+//        String new_cost = "" + (Double.parseDouble(jTextField13.getText()) + cost);
+//        jTextField13.setText(new_cost);
+//    }
+    
+    
+    public void delete_table_row(){
+        DefaultTableModel table = (DefaultTableModel)jTable2.getModel();
+        int i = jTable2.getSelectedRow();
+        if(i >= 0){
+            double old_cost = Double.parseDouble("" + table.getValueAt(i, 2));
+            String new_cost = "" + (Double.parseDouble(jTextField13.getText()) - old_cost);
+            jTextField13.setText(new_cost);
+            table.removeRow(i);
+        }else{
+            System.out.println("Delete Error");
+        }
+    }
+    //update table row
+    //delete table row
     
 //    public void update_state2 (String new_state){
 //        try{
@@ -78,7 +149,7 @@ public class Start_Frame extends javax.swing.JFrame {
     public void new_user(String fullname, String email, String pwd, String diet, String budget){
         try{
             BufferedWriter writer_user = new BufferedWriter(new FileWriter("new_user.txt"));
-            writer_user.write( email+ "," + pwd+ "\n" + fullname + "," + diet+ "," + budget);
+            writer_user.write( email+ "," + pwd+ ":" + fullname + "," + diet+ "," + budget);
             writer_user.close();
         }catch(IOException ex){
             System.out.println("ead file exception");
@@ -96,10 +167,14 @@ public class Start_Frame extends javax.swing.JFrame {
         if(val.equals("TRUE")){
             if(codet.equals("auth")){
                jPanel2.setVisible(false);
-                jPanel9.setVisible(true);  
+                jPanel9.setVisible(true);
+                jTextField13.setText("0.0");
+                jTextField12.setText(read_whisper("budget.txt"));
             }else if(codet.equals("new")){
                 jPanel9.setVisible(true);
                 jPanel11.setVisible(false);
+                jTextField13.setText("0.0");
+                jTextField12.setText(read_whisper("budget.txt"));
             }
 
             state = "MAIN";
@@ -113,6 +188,7 @@ public class Start_Frame extends javax.swing.JFrame {
              }
         }
         else if(val.equals("FALSE")){
+            jLabel7.setText("Username or Password is incorrect! ");
             jLabel7.setVisible(true);
             try{
                  BufferedWriter writer1 = new BufferedWriter(new FileWriter("stm_whisper.txt"));
@@ -145,12 +221,16 @@ public class Start_Frame extends javax.swing.JFrame {
         jButton9.setVisible(true);
     }          
     
-    public String read_whisper(){
+    public String read_whisper(String file_val){
         try{
-            BufferedReader reader = new BufferedReader(new FileReader("stm_whisper.txt"));
+            BufferedReader reader = new BufferedReader(new FileReader(file_val));
             //System.out.println(reader.readLine());
             String man_val = reader.readLine();
             reader.close();
+            if(file_val.equals("budget.txt")){
+                BufferedWriter writerB = new BufferedWriter(new FileWriter("budget.txt"));
+                writerB.close();                 
+            }
             return  man_val;
         }catch(IOException ex){
             System.out.println("reading exception");
@@ -225,7 +305,10 @@ public class Start_Frame extends javax.swing.JFrame {
         
         //update state 
         update_state("IDLE");
-           
+        
+        jTextField12.setEditable(false);
+        jTextField13.setEditable(false);
+        
 //        Toolkit toolkit = Toolkit.getDefaultToolkit();
 //        
 //        double width = toolkit.getScreenSize().getWidth();
@@ -259,50 +342,9 @@ public class Start_Frame extends javax.swing.JFrame {
         jPasswordField1 = new javax.swing.JPasswordField();
         jButton4 = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jPanel3 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel11 = new javax.swing.JLabel();
-        jButton5 = new javax.swing.JButton();
-        jLabel12 = new javax.swing.JLabel();
         jTextField2 = new javax.swing.JTextField();
-        jLabel13 = new javax.swing.JLabel();
-        jTextField3 = new javax.swing.JTextField();
-        jLabel14 = new javax.swing.JLabel();
-        jTextField4 = new javax.swing.JTextField();
-        jPasswordField2 = new javax.swing.JPasswordField();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel17 = new javax.swing.JLabel();
-        jTextField6 = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTextArea1 = new javax.swing.JTextArea();
-        filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 360), new java.awt.Dimension(0, 360), new java.awt.Dimension(32767, 360));
-        filler2 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 340), new java.awt.Dimension(0, 340), new java.awt.Dimension(32767, 340));
-        filler3 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 340), new java.awt.Dimension(0, 340), new java.awt.Dimension(32767, 340));
-        filler4 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 340), new java.awt.Dimension(0, 340), new java.awt.Dimension(32767, 340));
-        jSeparator1 = new javax.swing.JSeparator();
-        jSeparator2 = new javax.swing.JSeparator();
-        jPanel4 = new javax.swing.JPanel();
-        jLabel16 = new javax.swing.JLabel();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jPanel5 = new javax.swing.JPanel();
-        jLabel21 = new javax.swing.JLabel();
-        jLabel22 = new javax.swing.JLabel();
-        jLabel23 = new javax.swing.JLabel();
-        jLabel24 = new javax.swing.JLabel();
-        jLabel25 = new javax.swing.JLabel();
-        jButton8 = new javax.swing.JButton();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
-        jTextField11 = new javax.swing.JTextField();
-        jFormattedTextField1 = new javax.swing.JFormattedTextField();
         jPanel7 = new javax.swing.JPanel();
         jLabel26 = new javax.swing.JLabel();
         jLabel27 = new javax.swing.JLabel();
@@ -319,13 +361,12 @@ public class Start_Frame extends javax.swing.JFrame {
         jPanel9 = new javax.swing.JPanel();
         jButton10 = new javax.swing.JButton();
         jButton13 = new javax.swing.JButton();
-        jPanel8 = new javax.swing.JPanel();
         jLabel34 = new javax.swing.JLabel();
-        jLabel35 = new javax.swing.JLabel();
         jTextField12 = new javax.swing.JTextField();
+        jLabel35 = new javax.swing.JLabel();
         jTextField13 = new javax.swing.JTextField();
-        jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable2 = new javax.swing.JTable();
         jPanel10 = new javax.swing.JPanel();
         jLabel31 = new javax.swing.JLabel();
         jLabel32 = new javax.swing.JLabel();
@@ -455,15 +496,18 @@ public class Start_Frame extends javax.swing.JFrame {
         getContentPane().add(jPanel1, "card2");
 
         jPanel2.setPreferredSize(new java.awt.Dimension(800, 480));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
         jLabel2.setText("Username");
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(202, 168, 118, -1));
 
         jTextField1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTextField1MouseClicked(evt);
             }
         });
+        jPanel2.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(419, 167, 161, -1));
 
         jButton2.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
         jButton2.setText("Login");
@@ -472,13 +516,17 @@ public class Start_Frame extends javax.swing.JFrame {
                 jButton2ActionPerformed(evt);
             }
         });
+        jPanel2.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(342, 380, 124, 40));
 
         jLabel4.setFont(new java.awt.Font("Georgia", 0, 36)); // NOI18N
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Login  ");
+        jPanel2.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(278, 97, 229, -1));
 
         jLabel5.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
         jLabel5.setText("Password");
+        jPanel2.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(202, 230, 136, -1));
+        jPanel2.add(jPasswordField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(419, 229, 162, -1));
 
         jButton4.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
         jButton4.setText("Sign Up");
@@ -487,318 +535,29 @@ public class Start_Frame extends javax.swing.JFrame {
                 jButton4ActionPerformed(evt);
             }
         });
+        jPanel2.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(507, 380, 124, 40));
 
         jLabel7.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
         jLabel7.setForeground(new java.awt.Color(255, 51, 51));
         jLabel7.setText("Username or Password is incorrect! ");
+        jPanel2.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(247, 332, -1, -1));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(202, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(81, 81, 81)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, 162, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(219, 219, 219))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(41, 41, 41)
-                        .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(172, 172, 172))))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(278, 278, 278)
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(244, 244, 244)
-                        .addComponent(jLabel7)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(97, 97, 97)
-                .addComponent(jLabel4)
-                .addGap(29, 29, 29)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel2))
-                .addGap(36, 36, 36)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jPasswordField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel5))
-                .addGap(18, 18, 18)
-                .addComponent(jLabel7)
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(119, Short.MAX_VALUE))
-        );
+        jLabel8.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        jLabel8.setText("Budget ");
+        jPanel2.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(202, 289, 109, -1));
+
+        jLabel9.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
+        jLabel9.setText("$");
+        jPanel2.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(387, 289, 26, -1));
+
+        jTextField2.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTextField2MouseClicked(evt);
+            }
+        });
+        jPanel2.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(419, 288, 161, -1));
 
         getContentPane().add(jPanel2, "card3");
-
-        jPanel3.setBounds(new java.awt.Rectangle(0, 0, 800, 480));
-        jPanel3.setMaximumSize(new java.awt.Dimension(800, 480));
-        jPanel3.setMinimumSize(new java.awt.Dimension(800, 480));
-        jPanel3.setPreferredSize(new java.awt.Dimension(800, 480));
-        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
-
-        jLabel8.setFont(new java.awt.Font("Georgia", 0, 48)); // NOI18N
-        jLabel8.setText("Sign Up");
-        jPanel3.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 10, -1, -1));
-
-        jLabel9.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel9.setText("Personal Information");
-        jPanel3.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 90, -1, -1));
-
-        jLabel10.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel10.setText("Dietary Restrictions");
-        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 90, -1, -1));
-
-        jLabel11.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel11.setText("Budget");
-        jPanel3.add(jLabel11, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 90, -1, -1));
-
-        jButton5.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jButton5.setText("Submit");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 340, 178, 61));
-
-        jLabel12.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel12.setText("Enter Budget");
-        jPanel3.add(jLabel12, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 120, -1, -1));
-
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 140, 169, -1));
-
-        jLabel13.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel13.setText("Full Name");
-        jPanel3.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, -1));
-        jPanel3.add(jTextField3, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, 149, -1));
-
-        jLabel14.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel14.setText("Email");
-        jPanel3.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 170, -1, -1));
-        jPanel3.add(jTextField4, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 190, 149, -1));
-        jPanel3.add(jPasswordField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 250, 149, -1));
-
-        jLabel15.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel15.setText("Password ");
-        jPanel3.add(jLabel15, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 230, -1, -1));
-
-        jLabel17.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel17.setText("Street Address");
-        jPanel3.add(jLabel17, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 290, -1, -1));
-
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 180, -1));
-
-        jLabel18.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel18.setText("State");
-        jPanel3.add(jLabel18, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, -1, -1));
-
-        jLabel19.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel19.setText("Zip Code");
-        jPanel3.add(jLabel19, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 350, -1, -1));
-
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 380, 31, -1));
-
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
-            }
-        });
-        jPanel3.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 380, 75, -1));
-
-        jLabel20.setFont(new java.awt.Font("Georgia", 0, 14)); // NOI18N
-        jLabel20.setText("Enter Dietary Restrictions");
-        jPanel3.add(jLabel20, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, -1, -1));
-
-        jTextArea1.setColumns(20);
-        jTextArea1.setRows(5);
-        jTextArea1.setToolTipText("Enter dietary restrictions seperated by commas");
-        jScrollPane1.setViewportView(jTextArea1);
-
-        jPanel3.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 140, 235, 260));
-        jPanel3.add(filler1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 0));
-        jPanel3.add(filler2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 0));
-        jPanel3.add(filler3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 0));
-        jPanel3.add(filler4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, 0));
-
-        jSeparator1.setBackground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
-        jSeparator1.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel3.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 90, -1, 312));
-
-        jSeparator2.setBackground(new java.awt.Color(0, 0, 0));
-        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
-        jSeparator2.setOrientation(javax.swing.SwingConstants.VERTICAL);
-        jPanel3.add(jSeparator2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 90, -1, 314));
-
-        getContentPane().add(jPanel3, "card4");
-
-        jPanel4.setBounds(new java.awt.Rectangle(0, 0, 800, 480));
-        jPanel4.setMaximumSize(new java.awt.Dimension(800, 480));
-        jPanel4.setPreferredSize(new java.awt.Dimension(800, 480));
-
-        jLabel16.setFont(new java.awt.Font("Georgia", 0, 48)); // NOI18N
-        jLabel16.setText("Checkout");
-
-        jButton6.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
-        jButton6.setText("Enter Card");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
-
-        jButton7.setFont(new java.awt.Font("Georgia", 0, 24)); // NOI18N
-        jButton7.setText("Swipe Card");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
-        jPanel4.setLayout(jPanel4Layout);
-        jPanel4Layout.setHorizontalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(287, 287, 287)
-                .addComponent(jLabel16)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(99, 99, 99)
-                .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(128, 128, 128))
-        );
-        jPanel4Layout.setVerticalGroup(
-            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jLabel16)
-                .addGap(97, 97, 97)
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(160, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(jPanel4, "card5");
-
-        jPanel5.setBounds(new java.awt.Rectangle(0, 0, 800, 480));
-        jPanel5.setMaximumSize(new java.awt.Dimension(800, 480));
-        jPanel5.setPreferredSize(new java.awt.Dimension(800, 480));
-
-        jLabel21.setFont(new java.awt.Font("Georgia", 0, 48)); // NOI18N
-        jLabel21.setText("Enter Card Information");
-
-        jLabel22.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jLabel22.setText("Card Number");
-
-        jLabel23.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jLabel23.setText("Expiry Date");
-
-        jLabel24.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jLabel24.setText("CVV");
-
-        jLabel25.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jLabel25.setText("Zipcode");
-
-        jButton8.setFont(new java.awt.Font("Georgia", 0, 18)); // NOI18N
-        jButton8.setText("Continue");
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
-            }
-        });
-
-        jFormattedTextField1.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("mm/dd/yyyy"))));
-
-        javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
-        jPanel5.setLayout(jPanel5Layout);
-        jPanel5Layout.setHorizontalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addContainerGap(154, Short.MAX_VALUE)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel23)
-                            .addComponent(jLabel22)
-                            .addComponent(jLabel21)
-                            .addGroup(jPanel5Layout.createSequentialGroup()
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel24)
-                                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(193, 193, 193)
-                                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel25)
-                                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, 282, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(140, 140, 140))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel5Layout.createSequentialGroup()
-                        .addComponent(jButton8)
-                        .addGap(89, 89, 89))))
-        );
-        jPanel5Layout.setVerticalGroup(
-            jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel5Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jLabel21)
-                .addGap(33, 33, 33)
-                .addComponent(jLabel22)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(26, 26, 26)
-                .addComponent(jLabel23)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jFormattedTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel24)
-                    .addComponent(jLabel25))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField10, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jTextField11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 41, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(76, Short.MAX_VALUE))
-        );
-
-        getContentPane().add(jPanel5, "card6");
 
         jPanel7.setBounds(new java.awt.Rectangle(0, 0, 800, 480));
         jPanel7.setMaximumSize(new java.awt.Dimension(800, 480));
@@ -923,71 +682,70 @@ public class Start_Frame extends javax.swing.JFrame {
             }
         });
 
-        jButton13.setText("Edit Inforrmation");
+        jButton13.setText("Delete Item");
         jButton13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton13ActionPerformed(evt);
             }
         });
 
-        jPanel8.setBackground(new java.awt.Color(153, 153, 153));
-        jPanel8.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+        jLabel34.setText("Budget: $");
 
-        jLabel34.setText("Budget:");
-        jPanel8.add(jLabel34, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 354, -1, -1));
+        jLabel35.setText("Total:  $");
 
-        jLabel35.setText("Total: ");
-        jPanel8.add(jLabel35, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 354, -1, -1));
-        jPanel8.add(jTextField12, new org.netbeans.lib.awtextra.AbsoluteConstraints(313, 349, 79, -1));
-        jPanel8.add(jTextField13, new org.netbeans.lib.awtextra.AbsoluteConstraints(456, 349, 72, -1));
-
-        jTable1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        jTable2.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Product Name", "Quantity", "Cost"
+                "Product Name", "Quantity", "Cost ($)"
             }
-        ) {
-            Class[] types = new Class [] {
-                java.lang.String.class, java.lang.Integer.class, java.lang.Float.class
-            };
-
-            public Class getColumnClass(int columnIndex) {
-                return types [columnIndex];
-            }
-        });
-        jScrollPane2.setViewportView(jTable1);
-
-        jPanel8.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 30, 490, 300));
+        ));
+        jScrollPane1.setViewportView(jTable2);
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
         jPanel9.setLayout(jPanel9Layout);
         jPanel9Layout.setHorizontalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGap(40, 40, 40)
-                .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
                 .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(50, Short.MAX_VALUE))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(194, 194, 194)
+                        .addComponent(jLabel34)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, 79, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(19, 19, 19)
+                        .addComponent(jLabel35)
+                        .addGap(5, 5, 5)
+                        .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(86, 86, 86)
+                        .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
         jPanel9Layout.setVerticalGroup(
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
-                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGap(88, 88, 88)
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(50, 50, 50)
-                        .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, 390, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel9Layout.createSequentialGroup()
-                        .addGap(260, 260, 260)
                         .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(40, 40, 40)
-                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(43, Short.MAX_VALUE))
+                        .addGap(27, 27, 27)
+                        .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(35, 35, 35))
+                    .addGroup(jPanel9Layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)))
+                .addGroup(jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel35)
+                    .addComponent(jTextField13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTextField12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel34))
+                .addContainerGap(59, Short.MAX_VALUE))
         );
 
         getContentPane().add(jPanel9, "card6");
@@ -1280,10 +1038,34 @@ public class Start_Frame extends javax.swing.JFrame {
         // TODO add your handling code here:
 
 //        if (read_whisper() == "0x03"){
-
         String user = jTextField1.getText();
         String pwd = jPasswordField1.getText();
-        auth_user(user,pwd);
+        String budget = jTextField2.getText();
+        if(budget.trim().isEmpty() != true ){
+            try{
+                int i = Integer.parseInt(jTextField2.getText());
+                    try{
+                        BufferedWriter writer_B = new BufferedWriter(new FileWriter("budget.txt"));
+                        writer_B.write(budget);
+                        writer_B.close();
+                    }catch(IOException e){
+                        System.out.println("reading exception");
+                        e.printStackTrace();           
+                    }
+                    auth_user(user,pwd);
+                    state = "AUTH";
+                    update_state("AUTH");
+                               
+            }catch(NumberFormatException e){
+                     jLabel7.setText("Please enter numeric budget ");
+                    jLabel7.setVisible(true);                
+            }
+                
+               }else{
+                    jLabel7.setText("Please enter desired budget ");
+                    jLabel7.setVisible(true); 
+                } 
+
 //        if(user == "AS"){
 //            update_state2("TRUE");
 //        }
@@ -1306,8 +1088,7 @@ public class Start_Frame extends javax.swing.JFrame {
 //            System.exit(0);
 //            jPanel2.setVisible(false);
 //            jPanel9.setVisible(true);
-            state = "AUTH";
-            update_state("AUTH");
+
 //        }
 //        else{
 //            //JOptionPane.showMessageDialog(null, "Incorrect Passward");
@@ -1336,57 +1117,6 @@ public class Start_Frame extends javax.swing.JFrame {
         send_data("h 0x02");
     }//GEN-LAST:event_jButton4ActionPerformed
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
-
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
-
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField8ActionPerformed
-
-    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        // TODO add your handling code here:
-        //enter values in the sd card 
-//        String budget = jTextField2.getText();
-//        String full_name = jTextField3.getText();
-//        String email = jTextField4.getText();
-//        String street_ad = jTextField6.getText();
-//        String state = jTextField7.getText();
-//        String zip_code = jTextField8.getText();
-//        String dietary_restrictions = jTextArea1.getText();
-//        String pwd2 = jPasswordField2.getText();
-        update_state("MAIN");
-        state = "MAIN";
-        jPanel4.setVisible(false);
-        jPanel9.setVisible(true);
-
-           //send SPI - 0x09 - handshake 
-    }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        // TODO add your handling code here:
-        state = "ENTER_CARD";
-        jPanel4.setVisible(false);
-        jPanel5.setVisible(true);
-        update_state("ENTER_CARD");
-    }//GEN-LAST:event_jButton6ActionPerformed
-
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-        state = "SWIPE_CARD";                
-        jPanel4.setVisible(false);
-        jPanel7.setVisible(true);
-        update_state("SWIPE_CARD");
-    }//GEN-LAST:event_jButton7ActionPerformed
-
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
         // TODO add your handling code here:
         //perform card verification 
@@ -1397,22 +1127,13 @@ public class Start_Frame extends javax.swing.JFrame {
         update_state("END");
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-        //TODO-  perform card verification 
-        state = "END";
-        startDate = new Date();
-        jPanel5.setVisible(false);
-        jPanel6.setVisible(true);
-        update_state("END");
-    }//GEN-LAST:event_jButton8ActionPerformed
-
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
         // TODO add your handling code here:
         state = "SWIPE_CARD";
         jPanel9.setVisible(false);
         jPanel7.setVisible(true);
         update_state("SWIPE_CARD");
+        send_data("h 0x13");
         //0x13
     }//GEN-LAST:event_jButton10ActionPerformed
 
@@ -1443,10 +1164,11 @@ public class Start_Frame extends javax.swing.JFrame {
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
        //spi send - 0x12
-        state = "EDIT";
-        jPanel9.setVisible(false);
-        jPanel10.setVisible(true);
-        update_state("EDIT");
+       delete_table_row();
+//        DefaultTableModel table = (DefaultTableModel)jTable2.getModel();
+//        table.addRow(new Object[]{jTextField13.getText(),jTextField12.getText(),""});
+        //jTable1.setModel(table);
+        //table.fireTableDataChanged();
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
@@ -1462,10 +1184,30 @@ public class Start_Frame extends javax.swing.JFrame {
         String email = jTextField24.getText();
         String diet = jTextArea3.getText();
         String pwd12 = jPasswordField4.getText();
-        new_user(full_name,email,pwd12,diet,budget);
+        if(budget.trim().isEmpty() || email.trim().isEmpty() || diet.trim().isEmpty() || full_name.trim().isEmpty() || pwd12.trim().isEmpty()){
+            JOptionPane.showMessageDialog(null, "Please do not leave any fields empty");
+        }else{
+            try{
+                int i = Integer.parseInt(jTextField22.getText());
+                new_user(full_name,email,pwd12,diet,budget);
+
+                try{
+                    BufferedWriter writer_B = new BufferedWriter(new FileWriter("budget.txt"));
+                    writer_B.write(budget);
+                    writer_B.close();
+                }catch(IOException e){
+                    System.out.println("reading exception");
+                    e.printStackTrace();           
+                }
+
+                state = "NEW_USER";
+                update_state("NEW_USER");
+                               
+            }catch(NumberFormatException e){
+                JOptionPane.showMessageDialog(null, "Please enter numeric budget");
+            }
+        }
         
-        state = "NEW_USER";
-        update_state("NEW_USER");
         
 
     }//GEN-LAST:event_jButton11ActionPerformed
@@ -1473,6 +1215,10 @@ public class Start_Frame extends javax.swing.JFrame {
     private void jTextField22ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField22ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jTextField22ActionPerformed
+
+    private void jTextField2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField2MouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTextField2MouseClicked
 
     /**
      * @param args the command line arguments
@@ -1529,6 +1275,7 @@ public class Start_Frame extends javax.swing.JFrame {
              String value_new;
              int k2 = 1;
              int k1 = 1;
+             int countB = 1;
  
 
 
@@ -1551,6 +1298,10 @@ public class Start_Frame extends javax.swing.JFrame {
                                  writerA.close();
                                  BufferedWriter writerU = new BufferedWriter(new FileWriter("new_user.txt"));
                                  writerU.close();
+                                 BufferedWriter writerS = new BufferedWriter(new FileWriter("new_scan.txt"));
+                                 writerS.close(); 
+                                 BufferedWriter writerB = new BufferedWriter(new FileWriter("budget.txt"));
+                                 writerB.close();                                    
                              }catch(IOException e){
                                  System.out.println("ead file exception");
                                  e.printStackTrace();
@@ -1565,7 +1316,7 @@ public class Start_Frame extends javax.swing.JFrame {
                                 
                         break;
                    case "AUTH": //send_data("t login"); 
-                        value_auth = fr.read_whisper();
+                        value_auth = fr.read_whisper("stm_whisper.txt");
                         if(value_auth != null){
                             fr.auth_it(value_auth,"auth");
                         }                             
@@ -1573,7 +1324,7 @@ public class Start_Frame extends javax.swing.JFrame {
                    case "SIGN_UP"://send_data("t sign_up");  System.out.println("SIGN_UP");
                         break;
                    case "NEW_USER": //send_data("t login"); 
-                        value_new = fr.read_whisper();
+                        value_new = fr.read_whisper("stm_whisper.txt");
                         if(value_new != null){
                             fr.auth_it(value_new,"new");
                         }                             
@@ -1591,10 +1342,33 @@ public class Start_Frame extends javax.swing.JFrame {
                                  System.out.println("ead file exception");
                                  e.printStackTrace();
                              }
+                            fr.add_table_row("Diet Conk", "1", "2.5");
                             k2 = k2-1;
                        }
+                        try{
+                             BufferedReader reader_scan = new BufferedReader(new FileReader("new_scan.txt"));
+                             String product_name = reader_scan.readLine();
+                             if(product_name == null){
+                                reader_scan.close(); 
+                             }else{
+                                String product_val = reader_scan.readLine();
+                                fr.add_table_row(product_name, "1", product_val);
+                                reader_scan.close();
+                                BufferedWriter writer_scan = new BufferedWriter(new FileWriter("new_scan.txt"));
+                                writer_scan.close();
+                                countB=1;
+                             }
+                            
+                         }catch(IOException e){
+                             System.out.println("ead file exception");
+                             e.printStackTrace();
+                         }
+                        if(countB>0){
+                            countB = fr.budget_check(1);  
+                        }
 
-                        System.out.println("MAIN");
+
+                        //System.out.println("MAIN");
                         break;
                    case "EDIT"://send_data("t edit");
                         break;
@@ -1604,6 +1378,7 @@ public class Start_Frame extends javax.swing.JFrame {
                    case "ENTER_CARD"://send_data("t enter"); 
                         break;
                    case "SWIPE_CARD"://send_data("t swipw"); 
+                       fr.send_data("h 0x13");
                        System.out.println("SWIPE");
 //                       try{
 //                             System.out.println("hello");
@@ -1663,18 +1438,24 @@ public class Start_Frame extends javax.swing.JFrame {
                        break;
                    case "END"://send_data("t end");
                         //System.out.println("END");
-                       k1 =1;
+
                         fr.endDate = new Date();
                         long Lapse = (fr.endDate.getTime() -fr.startDate.getTime())/1000;
                         if(Lapse > 10){
                             fr.new_game();
                         }else{
                             fr.update_time(10 - Lapse);
+                            if(Lapse == 5){
+                              k1 =1;
+                            k2 = 1;
+                            countB=1;
+                            fr.kings_castle();
+                            }
                         }
                         break;                
                 }
                 
-}
+    }
             }
         });
         
@@ -1687,13 +1468,9 @@ public class Start_Frame extends javax.swing.JFrame {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.Box.Filler filler1;
     private javax.swing.Box.Filler filler10;
     private javax.swing.Box.Filler filler11;
     private javax.swing.Box.Filler filler12;
-    private javax.swing.Box.Filler filler2;
-    private javax.swing.Box.Filler filler3;
-    private javax.swing.Box.Filler filler4;
     private javax.swing.Box.Filler filler5;
     private javax.swing.Box.Filler filler6;
     private javax.swing.Box.Filler filler7;
@@ -1707,30 +1484,9 @@ public class Start_Frame extends javax.swing.JFrame {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JButton jButton5;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JFormattedTextField jFormattedTextField1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel11;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
-    private javax.swing.JLabel jLabel21;
-    private javax.swing.JLabel jLabel22;
-    private javax.swing.JLabel jLabel23;
-    private javax.swing.JLabel jLabel24;
-    private javax.swing.JLabel jLabel25;
     private javax.swing.JLabel jLabel26;
     private javax.swing.JLabel jLabel27;
     private javax.swing.JLabel jLabel28;
@@ -1773,34 +1529,23 @@ public class Start_Frame extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
-    private javax.swing.JPanel jPanel5;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JPanel jPanel7;
-    private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JPasswordField jPasswordField1;
-    private javax.swing.JPasswordField jPasswordField2;
     private javax.swing.JPasswordField jPasswordField3;
     private javax.swing.JPasswordField jPasswordField4;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
-    private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
     private javax.swing.JSeparator jSeparator4;
     private javax.swing.JSeparator jSeparator5;
     private javax.swing.JSeparator jSeparator6;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextArea jTextArea1;
+    private javax.swing.JTable jTable2;
     private javax.swing.JTextArea jTextArea2;
     private javax.swing.JTextArea jTextArea3;
     private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
     private javax.swing.JTextField jTextField12;
     private javax.swing.JTextField jTextField13;
     private javax.swing.JTextField jTextField14;
@@ -1815,12 +1560,6 @@ public class Start_Frame extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField22;
     private javax.swing.JTextField jTextField23;
     private javax.swing.JTextField jTextField24;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     // End of variables declaration//GEN-END:variables
 }

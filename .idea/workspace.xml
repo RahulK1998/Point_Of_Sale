@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="88c080b7-f4a9-44f4-a05d-61ea3a4ac3d6" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/built-jar.properties" beforeDir="false" afterPath="$PROJECT_DIR$/build/built-jar.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Item.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Item.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$1.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$10.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$10.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$11.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$11.class" afterDir="false" />
@@ -14,12 +14,15 @@
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$16.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$16.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$17.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$17.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$18.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$18.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$19.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$19.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$19.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$2.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$20.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$20.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$21.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$21.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$22.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$22.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$23.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$23.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$20.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$21.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$22.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$23.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$24.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$25.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$26.class" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$3.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$4.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$5.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$5.class" afterDir="false" />
@@ -29,8 +32,6 @@
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$9.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame$9.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame.class" beforeDir="false" afterPath="$PROJECT_DIR$/build/classes/Point_Of_Sale/Start_Frame.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/dist/Point_Of_Sale.jar" beforeDir="false" afterPath="$PROJECT_DIR$/dist/Point_Of_Sale.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dist/main2.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Point_Of_Sale/Start_Frame.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/Point_Of_Sale/Start_Frame.form" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Point_Of_Sale/Start_Frame.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Point_Of_Sale/Start_Frame.java" afterDir="false" />
     </list>
