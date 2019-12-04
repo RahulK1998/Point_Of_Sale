@@ -19,17 +19,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author rahulkartick
  */
-//
-//public class myRunnable implements Runnable{
-//    private int var;
-//    
-//    public myRunnable(int var){
-//        this.var = var;
-//    }
-//    
-//
-//    
-//}
+
 
 
 public class Start_Frame extends javax.swing.JFrame {
@@ -37,9 +27,6 @@ public class Start_Frame extends javax.swing.JFrame {
     /**
      * Creates new form Start_Frame
      */
-    //String command = "python /c start python home/pi/Desktop/spitest1.py";
-
-    //BufferedReader reader;
     
     public void kings_castle(){
         jTextField1.setText("");
@@ -99,13 +86,6 @@ public class Start_Frame extends javax.swing.JFrame {
         jTextField13.setText(new_cost);
     }
     
-        
-//    public void update_table_row(String product_name,String quantity, String cost){
-//        DefaultTableModel table = (DefaultTableModel)jTable2.getModel();
-//        table.addRow(new Object[]{product_name,quantity,cost});
-//        String new_cost = "" + (Double.parseDouble(jTextField13.getText()) + cost);
-//        jTextField13.setText(new_cost);
-//    }
     
     
     public void delete_table_row(){
@@ -120,19 +100,7 @@ public class Start_Frame extends javax.swing.JFrame {
             System.out.println("Delete Error");
         }
     }
-    //update table row
-    //delete table row
-    
-//    public void update_state2 (String new_state){
-//        try{
-//            BufferedWriter writer_state = new BufferedWriter(new FileWriter("stm_whisper.txt"));
-//            writer_state.write(new_state);
-//            writer_state.close();
-//        }catch(IOException ex){
-//            System.out.println("ead file exception");
-//            ex.printStackTrace();
-//        }
-//    }
+
     
     public void auth_user(String user, String pwd){
         try{
@@ -243,7 +211,7 @@ public class Start_Frame extends javax.swing.JFrame {
         try{
             Process p;
             p = Runtime.getRuntime().exec("python spitest1.py " + data );
-             System.out.println(data);
+            //System.out.println(data);
         }catch (IOException e){
             System.out.println("python exception");
             e.printStackTrace();
@@ -261,39 +229,13 @@ public class Start_Frame extends javax.swing.JFrame {
         }
     }
         
-    public void cursor(){
-        try{
-            Process p;
-            p = Runtime.getRuntime().exec("python curser.py ");
-        }catch (IOException e){
-            System.out.println("python exception");
-            e.printStackTrace();
-        }
-    }
     
     
     public Start_Frame(){
         //initializations 
-//        try{
-//                    BufferedWriter writer0 = new BufferedWriter(new FileWriter("stm_whisper.txt"));
-//                writer0.close(); 
-//        }catch (IOException m){
-//            System.out.println("ead file exception");
-//            m.printStackTrace();
-//        }
-
-        //jPanel1.setVisible(true);
-//        jPanel2.setVisible(false);
-//        jPanel3.setVisible(false);
-//        jPanel4.setVisible(false);
-//        jPanel5.setVisible(false);
-//        jPanel6.setVisible(false);
-//        jPanel7.setVisible(false);
-//        jPanel9.setVisible(false);
-//        jPanel10.setVisible(false);
         
         //this.setUndecorated(true);
-        setExtendedState(JFrame.MAXIMIZED_BOTH);
+        //setExtendedState(JFrame.MAXIMIZED_BOTH);
         initComponents(); 
         jLabel7.setVisible(false);
         
@@ -310,7 +252,6 @@ public class Start_Frame extends javax.swing.JFrame {
         jTextField13.setEditable(false);
         
 //        Toolkit toolkit = Toolkit.getDefaultToolkit();
-//        
 //        double width = toolkit.getScreenSize().getWidth();
 //        double height = toolkit.getScreenSize().getHeight();      
 //        this.setSize((int)width, (int)height);   
@@ -1037,7 +978,6 @@ public class Start_Frame extends javax.swing.JFrame {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
 
-//        if (read_whisper() == "0x03"){
         String user = jTextField1.getText();
         String pwd = jPasswordField1.getText();
         String budget = jTextField2.getText();
@@ -1061,46 +1001,14 @@ public class Start_Frame extends javax.swing.JFrame {
                     jLabel7.setVisible(true);                
             }
                 
-               }else{
-                    jLabel7.setText("Please enter desired budget ");
-                    jLabel7.setVisible(true); 
-                } 
-
-//        if(user == "AS"){
-//            update_state2("TRUE");
-//        }
-//        else{
-//            update_state2("FALSE");
-//        }
-//
-//      
-//        send_data("h 0x03");
-//        send_data("l " + user + "," + pwd);
-//        send_data("s " + user + "," + pwd);
-//        
-//            //System.out.println(user + "," + pwd);
-// 
-//        }
-        
-        //lookup user id 
-//        if(pwd.equals("GoldRush1") &&  user.equals("PurduePete") ){
-//            //JOptionPane.showMessageDialog(null, "Hello "+ user );
-//            System.exit(0);
-//            jPanel2.setVisible(false);
-//            jPanel9.setVisible(true);
-
-//        }
-//        else{
-//            //JOptionPane.showMessageDialog(null, "Incorrect Passward");
-//            jLabel7.setVisible(true);
-//            
-//        }
-        //  send SPI - 0x03 
+        }else{
+             jLabel7.setText("Please enter desired budget ");
+             jLabel7.setVisible(true); 
+         } 
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        //send_data("h 0x02");
         state = "SIGN_UP";
         jPanel1.setVisible(false);
         jPanel11.setVisible(true);
@@ -1134,7 +1042,6 @@ public class Start_Frame extends javax.swing.JFrame {
         jPanel7.setVisible(true);
         update_state("SWIPE_CARD");
         send_data("h 0x13");
-        //0x13
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
@@ -1163,17 +1070,11 @@ public class Start_Frame extends javax.swing.JFrame {
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
         // TODO add your handling code here:
-       //spi send - 0x12
        delete_table_row();
-//        DefaultTableModel table = (DefaultTableModel)jTable2.getModel();
-//        table.addRow(new Object[]{jTextField13.getText(),jTextField12.getText(),""});
-        //jTable1.setModel(table);
-        //table.fireTableDataChanged();
     }//GEN-LAST:event_jButton13ActionPerformed
 
     private void jTextField1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTextField1MouseClicked
         // TODO add your handling code here:
-        //send_data("h 0xBE");
     }//GEN-LAST:event_jTextField1MouseClicked
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
@@ -1207,8 +1108,6 @@ public class Start_Frame extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Please enter numeric budget");
             }
         }
-        
-        
 
     }//GEN-LAST:event_jButton11ActionPerformed
 
@@ -1257,38 +1156,26 @@ public class Start_Frame extends javax.swing.JFrame {
             }      
         });
                
-    Thread t;
+        Thread t;
         t = new Thread(new Runnable(){
             String curr_state;
-            
-//            URL url = getClass().getResource("credit_card.txt");
-//            try{
-//                        File file = new File(url.toURI());
-//            }catch(URISyntaxException u){
-//            System.out.println("URO");
-//        }
 
-             File file = new File("credit_card.txt"); 
-             File file2 = new File("stm_whisper.txt"); 
+            File file = new File("credit_card.txt"); 
+            File file2 = new File("stm_whisper.txt"); 
              
-             String value_auth;
-             String value_new;
-             int k2 = 1;
-             int k1 = 1;
-             int countB = 1;
- 
+            String value_auth;
+            String value_new;
+            int k2 = 1;
+            int k1 = 1;
+            int countB = 1;
+            int x = 0;
 
-
-        
-             
             public void run(){
-
-
 
             while(true){
                 curr_state = fr.get_state();
                 switch(curr_state){
-                   case "IDLE": //send_data("t idle"); 
+                   case "IDLE": 
                        k2 = 1;
                        if(k1 == 1){ 
                             try{
@@ -1309,27 +1196,28 @@ public class Start_Frame extends javax.swing.JFrame {
                             k1 = k1-1;
                        }
                        
-                        System.out.println("IDLE");
+                        //System.out.println("IDLE");
                         break;
-                   case "LOGIN": //send_data("t login"); 
-                        System.out.println("LOGIN");
+                   case "LOGIN": 
+                        //System.out.println("LOGIN");
+                        //x = 0;
                                 
                         break;
-                   case "AUTH": //send_data("t login"); 
+                   case "AUTH": 
                         value_auth = fr.read_whisper("stm_whisper.txt");
                         if(value_auth != null){
                             fr.auth_it(value_auth,"auth");
                         }                             
                         break;
-                   case "SIGN_UP"://send_data("t sign_up");  System.out.println("SIGN_UP");
+                   case "SIGN_UP":
                         break;
-                   case "NEW_USER": //send_data("t login"); 
+                   case "NEW_USER": 
                         value_new = fr.read_whisper("stm_whisper.txt");
                         if(value_new != null){
                             fr.auth_it(value_new,"new");
                         }                             
                         break;
-                   case "MAIN"://send_data("t main"); 
+                   case "MAIN":
                        if(k2 == 1){ 
                             try{
                                  BufferedWriter writerI = new BufferedWriter(new FileWriter("stm_whisper.txt"));
@@ -1370,25 +1258,13 @@ public class Start_Frame extends javax.swing.JFrame {
 
                         //System.out.println("MAIN");
                         break;
-                   case "EDIT"://send_data("t edit");
-                        break;
-                   case "CHECK_OUT"://send_data("t checkout");
-                        System.out.println("CHECKOUT");
-                        break;
-                   case "ENTER_CARD"://send_data("t enter"); 
-                        break;
                    case "SWIPE_CARD"://send_data("t swipw"); 
                        fr.send_data("h 0x13");
-                       System.out.println("SWIPE");
-//                       try{
-//                             System.out.println("hello");
-//                         } catch (Exception e){
-//                             e.printStackTrace();
-//                         }
+                       //System.out.println("SWIPE");
                        
 //                       while(true){ 
                             try{
-                                System.out.println("hello");
+                                //System.out.println("hello");
                                 BufferedReader reader = new BufferedReader(new FileReader(file));
 
                                 String line = reader.readLine();
@@ -1396,7 +1272,6 @@ public class Start_Frame extends javax.swing.JFrame {
                                     String line2 = reader.readLine();
                                     //System.out.println(line.substring(0,2));
                                     if(line2 == null){
-                                    //will fail if name is FA 
                                     System.out.println("EHAT2");
                                     JOptionPane.showMessageDialog(null, "Please swipe either a credit or debit card");                                    
                                     BufferedWriter writer = new BufferedWriter(new FileWriter(file));
@@ -1414,21 +1289,6 @@ public class Start_Frame extends javax.swing.JFrame {
                                 reader.close();
                                 
                                 
-//                                if (line == null){
-//                                    System.out.println("EHAT");
-//                                }else if(line == "FALSE"){
-//                                    System.out.println("EHAT2");
-//                                    JOptionPane.showMessageDialog(null, "Please swipe either a credit or debit card");
-//                                    writer.write("");
-//                                    
-//                                } else{
-//                                      String cr_no = reader.readLine();
-//                                      String cr_name = line;
-//                                      String cr_date = reader.readLine();
-//                                      fr.swipe_card(cr_no,cr_name,cr_date);
-//                                
-//                                    break;
-//                                }
                             }catch(IOException ex){
                                 System.out.println("ead file exception");
                                 ex.printStackTrace();
@@ -1436,8 +1296,7 @@ public class Start_Frame extends javax.swing.JFrame {
 //                       }   
 
                        break;
-                   case "END"://send_data("t end");
-                        //System.out.println("END");
+                   case "END":
 
                         fr.endDate = new Date();
                         long Lapse = (fr.endDate.getTime() -fr.startDate.getTime())/1000;

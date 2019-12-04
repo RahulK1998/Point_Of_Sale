@@ -1,1 +1,1 @@
-NEW_USER
+LOGIN
