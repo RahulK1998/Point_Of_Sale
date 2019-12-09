@@ -27,6 +27,17 @@ public class Start_Frame extends javax.swing.JFrame {
     /**
      * Creates new form Start_Frame
      */
+//    public static void init_run(){
+//        try{
+//            //Process p;
+//            Runtime.getRuntime().exec("python state_machine2.py " );
+//            //System.out.println(data);
+//        }catch (IOException e){
+//            System.out.println("python exception");
+//            e.printStackTrace();
+//        }
+//    }
+    
     
     public void kings_castle(){
         jTextField1.setText("");
@@ -93,7 +104,7 @@ public class Start_Frame extends javax.swing.JFrame {
         int i = jTable2.getSelectedRow();
         if(i >= 0){
             double old_cost = Double.parseDouble("" + table.getValueAt(i, 2));
-            String new_cost = "" + (Double.parseDouble(jTextField13.getText()) - old_cost);
+            String new_cost = "" + (((double)((int)((Double.parseDouble(jTextField13.getText()) - old_cost)*100)))/100);
             jTextField13.setText(new_cost);
             table.removeRow(i);
         }else{
@@ -156,8 +167,9 @@ public class Start_Frame extends javax.swing.JFrame {
              }
         }
         else if(val.equals("FALSE")){
-            jLabel7.setText("Username or Password is incorrect! ");
-            jLabel7.setVisible(true);
+//            jLabel7.setText("Username or Password is incorrect! ");
+//            jLabel7.setVisible(true);        
+            JOptionPane.showMessageDialog(null, "Username or Password is incorrect!");
             try{
                  BufferedWriter writer1 = new BufferedWriter(new FileWriter("stm_whisper.txt"));
                  writer1.close();   
@@ -165,6 +177,8 @@ public class Start_Frame extends javax.swing.JFrame {
                  System.out.println("ead file exception");
                  e.printStackTrace();
              }
+            state = "LOGIN";
+            update_state("LOGIN");
         }
 
     }
@@ -176,6 +190,9 @@ public class Start_Frame extends javax.swing.JFrame {
     public void new_game(){
         jPanel6.setVisible(false);
         jPanel1.setVisible(true);
+        state = "IDLE";
+        update_state("IDLE");
+        
     }
     
     public void update_time(long ti){
@@ -187,6 +204,8 @@ public class Start_Frame extends javax.swing.JFrame {
         jTextField9.setText(cr_no);
         jTextField21.setText(cr_date);
         jButton9.setVisible(true);
+        update_state("END");
+        //state = "END";
     }          
     
     public String read_whisper(String file_val){
@@ -234,9 +253,11 @@ public class Start_Frame extends javax.swing.JFrame {
     public Start_Frame(){
         //initializations 
         
-        //this.setUndecorated(true);
-        //setExtendedState(JFrame.MAXIMIZED_BOTH);
+        this.setUndecorated(true);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
+
         initComponents(); 
+//        init_run();
         jLabel7.setVisible(false);
         
         //swipe card frame
@@ -997,13 +1018,15 @@ public class Start_Frame extends javax.swing.JFrame {
                     update_state("AUTH");
                                
             }catch(NumberFormatException e){
-                     jLabel7.setText("Please enter numeric budget ");
-                    jLabel7.setVisible(true);                
+//                     jLabel7.setText("Please enter numeric budget ");
+//                    jLabel7.setVisible(true);     
+        JOptionPane.showMessageDialog(null, "Please enter numeric budget");
             }
                 
         }else{
-             jLabel7.setText("Please enter desired budget ");
-             jLabel7.setVisible(true); 
+//             jLabel7.setText("Please enter desired budget ");
+//             jLabel7.setVisible(true); 
+        JOptionPane.showMessageDialog(null, "Please enter desired budget");
          } 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -1032,7 +1055,7 @@ public class Start_Frame extends javax.swing.JFrame {
         startDate = new Date();
         jPanel7.setVisible(false);
         jPanel6.setVisible(true);
-        update_state("END");
+        //update_state("END");
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
@@ -1196,7 +1219,7 @@ public class Start_Frame extends javax.swing.JFrame {
                             k1 = k1-1;
                        }
                        
-                        //System.out.println("IDLE");
+                        System.out.println("IDLE");
                         break;
                    case "LOGIN": 
                         //System.out.println("LOGIN");
@@ -1230,7 +1253,7 @@ public class Start_Frame extends javax.swing.JFrame {
                                  System.out.println("ead file exception");
                                  e.printStackTrace();
                              }
-                            fr.add_table_row("Diet Conk", "1", "2.5");
+//                            fr.add_table_row("Diet Conk", "1", "2.5");
                             k2 = k2-1;
                        }
                         try{
@@ -1272,13 +1295,13 @@ public class Start_Frame extends javax.swing.JFrame {
                                     String line2 = reader.readLine();
                                     //System.out.println(line.substring(0,2));
                                     if(line2 == null){
-                                    System.out.println("EHAT2");
+                                    //System.out.println("EHAT2");
                                     JOptionPane.showMessageDialog(null, "Please swipe either a credit or debit card");                                    
                                     BufferedWriter writer = new BufferedWriter(new FileWriter(file));
                                     writer.close();                                   
                                     }else{
-                                      String cr_no = line2;
-                                      String cr_name = line;
+                                      String cr_name = line2;
+                                      String cr_no = line;
                                       String cr_date = reader.readLine();
                                       fr.swipe_card(cr_no,cr_name,cr_date);
                                       BufferedWriter writer2 = new BufferedWriter(new FileWriter(file));
